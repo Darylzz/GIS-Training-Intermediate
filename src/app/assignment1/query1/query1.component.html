@@ -1,1 +1,20 @@
-<p>query1 works!</p>
+<div class="queryContainer">
+  <p-table [value]="infos" styleClass="p-datatable-gridline">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Subregion</th>
+        <th>State Name(Full)</th>
+        <th>State Name(Abbr.)</th>
+      </tr>
+    </ng-template>
+    <ng-container *ngFor="let info of infos">
+      <ng-template pTemplate="body">
+        <tr>
+          <td>{{ info.attributes?.sub_region }}</td>
+          <td>{{ info.attributes?.state_name }}</td>
+          <td>{{ info.attributes?.state_abbr }}</td>
+        </tr>
+      </ng-template>
+    </ng-container>
+  </p-table>
+</div>

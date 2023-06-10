@@ -7,6 +7,8 @@ import { Map1Component } from './assignment1/map1/map1.component';
 import { Query1Component } from './assignment1/query1/query1.component';
 import { RouterModule } from '@angular/router';
 import { Map1Service } from './assignment1/service/map1.service';
+import { TableModule } from 'primeng/table';
+import { Query1Service } from './assignment1/service/query1.service';
 
 const routes = [{ path: '1', component: Assignment1Component }];
 
@@ -17,8 +19,8 @@ const routes = [{ path: '1', component: Assignment1Component }];
     Map1Component,
     Query1Component,
   ],
-  imports: [BrowserModule, RouterModule.forRoot(routes)],
-  providers: [Map1Service],
+  imports: [BrowserModule, TableModule, RouterModule.forRoot(routes)],
+  providers: [Map1Service, Query1Service],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
