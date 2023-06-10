@@ -15,7 +15,7 @@ export class Map1Component implements OnInit {
   ngOnInit(): void {
     this.map1Service.createMap(this.viewMap.nativeElement);
     const url =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/';
+      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer';
 
     const layer = new MapImageLayer({
       url: url,
