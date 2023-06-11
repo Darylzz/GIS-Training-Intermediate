@@ -4,6 +4,8 @@ import MapView from '@arcgis/core/views/MapView';
 export class Map1Service {
   map: Map | null;
   mapView: MapView | null;
+  rings: any | null;
+  spatialRef: any | null;
 
   createMap(container: any) {
     this.map = new Map({

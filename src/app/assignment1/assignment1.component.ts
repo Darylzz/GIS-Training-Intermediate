@@ -6,9 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./assignment1.component.css'],
 })
 export class Assignment1Component {
-  layerInfo: any[] = [];
+  geometry: {
+    rings: number[][][] | undefined;
+    spatialRef: any | undefined;
+  };
 
-  getLayer(info: any) {
-    this.layerInfo = info;
+  getData(event: any) {
+    this.geometry = event;
+    // console.log(this.geometry);
   }
 }

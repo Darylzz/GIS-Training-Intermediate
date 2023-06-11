@@ -1,22 +1,33 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  OnChanges,
+  Input,
+} from '@angular/core';
 import { Map1Service } from '../service/map1.service';
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import { Query1Service } from '../service/query1.service';
+import Polygon from '@arcgis/core/geometry/Polygon';
+import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Graphic from '@arcgis/core/Graphic';
 
 @Component({
   selector: 'app-map1',
   templateUrl: './map1.component.html',
   styleUrls: ['./map1.component.css'],
 })
-export class Map1Component implements OnInit {
+export class Map1Component implements OnInit, OnChanges {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
+  @Input() getGeometry: {
+    rings: number[][][] | undefined;
+    spatialRef: any | undefined;
+  };
   featureLayer: FeatureLayer | null;
+  graphic: Graphic;
 
-  constructor(
-    private map1Service: Map1Service,
-    private query1Service: Query1Service
-  ) {}
+  constructor(private map1Service: Map1Service) {}
 
   ngOnInit(): void {
     this.map1Service.createMap(this.viewMap.nativeElement);
@@ -28,23 +39,27 @@ export class Map1Component implements OnInit {
     });
 
     this.map1Service.map?.add(layer);
+  }
 
-    const urlLayer =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2 ';
-    this.featureLayer = new FeatureLayer({
-      url: urlLayer,
+  ngOnChanges(): void {
+    console.log(this.getGeometry);
+    const polygon = new Polygon({
+      rings: this.getGeometry?.rings,
+      spatialReference: this.getGeometry?.spatialRef,
     });
-
-    const query = this.featureLayer.createQuery();
-    query.where = '1=1';
-    query.outFields = ['*'];
-    query.returnGeometry = true;
-
-    this.featureLayer.queryFeatures(query).then((response) => {
-      const res = response.features;
-      // console.log(res);
-      this.query1Service.layerInfo.push(res);
-      console.log(this.query1Service.layerInfo);
+    const symbols = new SimpleFillSymbol({
+      color: 'blue',
+      outline: {
+        color: 'tranparent',
+        width: 2,
+      },
     });
+    const graphic = new Graphic({
+      symbol: symbols,
+      geometry: polygon,
+    });
+    this.map1Service.mapView?.graphics.remove(this.graphic);
+    this.graphic = graphic;
+    this.map1Service.mapView?.graphics.add(graphic);
   }
 }
