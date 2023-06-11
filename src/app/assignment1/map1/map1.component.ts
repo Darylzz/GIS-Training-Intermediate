@@ -4,7 +4,6 @@ import {
   ElementRef,
   OnInit,
   OnChanges,
-  Input,
 } from '@angular/core';
 import { Map1Service } from '../service/map1.service';
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
@@ -20,14 +19,31 @@ import Graphic from '@arcgis/core/Graphic';
 })
 export class Map1Component implements OnInit, OnChanges {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
-  @Input() getGeometry: {
-    rings: number[][][] | undefined;
-    spatialRef: any | undefined;
-  };
   featureLayer: FeatureLayer | null;
   graphic: Graphic;
 
-  constructor(private map1Service: Map1Service) {}
+  constructor(private map1Service: Map1Service) {
+    this.map1Service.emitRings.subscribe((data) => {
+      const polygon = new Polygon({
+        rings: data?.rings,
+        spatialReference: data?.spatialRef,
+      });
+      const symbols = new SimpleFillSymbol({
+        color: 'blue',
+        outline: {
+          color: 'tranparent',
+          width: 2,
+        },
+      });
+      const graphic = new Graphic({
+        symbol: symbols,
+        geometry: polygon,
+      });
+      this.map1Service.mapView?.graphics.remove(this.graphic);
+      this.graphic = graphic;
+      this.map1Service.mapView?.graphics.add(graphic);
+    });
+  }
 
   ngOnInit(): void {
     this.map1Service.createMap(this.viewMap.nativeElement);
@@ -41,25 +57,5 @@ export class Map1Component implements OnInit, OnChanges {
     this.map1Service.map?.add(layer);
   }
 
-  ngOnChanges(): void {
-    console.log(this.getGeometry);
-    const polygon = new Polygon({
-      rings: this.getGeometry?.rings,
-      spatialReference: this.getGeometry?.spatialRef,
-    });
-    const symbols = new SimpleFillSymbol({
-      color: 'blue',
-      outline: {
-        color: 'tranparent',
-        width: 2,
-      },
-    });
-    const graphic = new Graphic({
-      symbol: symbols,
-      geometry: polygon,
-    });
-    this.map1Service.mapView?.graphics.remove(this.graphic);
-    this.graphic = graphic;
-    this.map1Service.mapView?.graphics.add(graphic);
-  }
+  ngOnChanges(): void {}
 }
