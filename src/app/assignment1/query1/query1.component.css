@@ -2,3 +2,6 @@
   max-height: 100vh;
   overflow: auto;
 }
+.highlight {
+  background-color: rgb(85, 85, 252);
+}

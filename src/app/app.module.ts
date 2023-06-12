@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgClass } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { Assignment1Component } from './assignment1/assignment1.component';
@@ -18,7 +19,7 @@ const routes = [{ path: '1', component: Assignment1Component }];
     Map1Component,
     Query1Component,
   ],
-  imports: [BrowserModule, TableModule, RouterModule.forRoot(routes)],
+  imports: [BrowserModule, TableModule, NgClass, RouterModule.forRoot(routes)],
   providers: [Map1Service],
   bootstrap: [AppComponent],
 })

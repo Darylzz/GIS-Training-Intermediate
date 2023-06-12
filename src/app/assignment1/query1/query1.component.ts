@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import { Map1Service } from '../service/map1.service';
 
@@ -10,6 +10,7 @@ import { Map1Service } from '../service/map1.service';
 export class Query1Component implements OnInit {
   infos: any[] = [];
   featureLayer: FeatureLayer | null;
+  selectedId: any;
 
   constructor(private map1Service: Map1Service) {}
   ngOnInit(): void {
@@ -31,7 +32,10 @@ export class Query1Component implements OnInit {
   }
 
   clickGetId(id: any) {
-    // console.log(id);
+    console.log(id);
+    this.selectedId = id;
+    console.log(this.selectedId);
+
     const rings = id.geometry.rings;
     const spatialRef = id.geometry.spatialReference;
     this.map1Service.rings = rings;
