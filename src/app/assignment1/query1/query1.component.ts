@@ -33,7 +33,7 @@ export class Query1Component implements OnInit {
 
   clickGetId(id: any) {
     console.log(id);
-    this.selectedId = id;
+    this.selectedId = id.uid;
     console.log(this.selectedId);
 
     const rings = id.geometry.rings;

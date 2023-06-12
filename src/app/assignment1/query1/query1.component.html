@@ -13,13 +13,13 @@
     </ng-template>
     <ng-template pTemplate="body" let-info let-id>
       <tr (click)="clickGetId(id)">
-        <td [ngClass]="{ highlight: selectedId === id }">
+        <td [ngClass]="{ highlight: selectedId === id.uid }">
           {{ info.attributes?.sub_region }}
         </td>
-        <td [ngClass]="{ highlight: selectedId === id }">
+        <td [ngClass]="{ highlight: selectedId === id.uid }">
           {{ info.attributes?.state_name }}
         </td>
-        <td [ngClass]="{ highlight: selectedId === id }">
+        <td [ngClass]="{ highlight: selectedId === id.uid }">
           {{ info.attributes?.state_abbr }}
         </td>
       </tr>
