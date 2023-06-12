@@ -50,9 +50,9 @@ export class Map1Component implements OnInit, OnChanges {
   ngOnInit(): void {
     this.map1Service.createMap(this.viewMap.nativeElement);
     const url =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer';
+      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2 ';
 
-    const layer = new MapImageLayer({
+    const layer = new FeatureLayer({
       url: url,
     });
 
