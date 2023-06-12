@@ -1,5 +1,9 @@
 <div class="queryContainer">
-  <p-table [value]="infos[0]" styleClass="p-datatable-gridline">
+  <p-table
+    [value]="infos[0]"
+    styleClass="p-datatable-gridline"
+    selectionMode="single"
+  >
     <ng-template pTemplate="header">
       <tr>
         <th>Subregion</th>
