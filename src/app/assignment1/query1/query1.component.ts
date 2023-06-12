@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import { Map1Service } from '../service/map1.service';
 
 @Component({
   selector: 'app-query1',
@@ -16,7 +15,7 @@ export class Query1Component implements OnInit {
   constructor() {}
   ngOnInit(): void {
     const urlLayer =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2 ';
+      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2';
     this.featureLayer = new FeatureLayer({
       url: urlLayer,
     });
@@ -28,6 +27,8 @@ export class Query1Component implements OnInit {
 
     this.featureLayer.queryFeatures(query).then((response) => {
       const res = response.features;
+      console.log(res);
+
       this.infos.push(res);
     });
   }

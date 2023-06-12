@@ -7,7 +7,6 @@ import {
   Input,
 } from '@angular/core';
 import { Map1Service } from '../service/map1.service';
-import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
@@ -32,9 +31,9 @@ export class Map1Component implements OnInit, OnChanges {
   ngOnInit(): void {
     this.map1Service.createMap(this.viewMap.nativeElement);
     const url =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer';
+      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2';
 
-    const layer = new MapImageLayer({
+    const layer = new FeatureLayer({
       url: url,
     });
 
