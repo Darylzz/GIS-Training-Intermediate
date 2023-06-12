@@ -1,5 +1,5 @@
 .container {
   display: flex;
-  gap: 50px;
+  width: 100vw;
   overflow: hidden;
 }
