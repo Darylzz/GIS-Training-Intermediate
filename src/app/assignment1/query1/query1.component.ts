@@ -11,6 +11,7 @@ export class Query1Component implements OnInit {
   @Output() sendGeometry = new EventEmitter<any>();
   infos: any[] = [];
   featureLayer: FeatureLayer | null;
+  selectedId: any;
 
   constructor() {}
   ngOnInit(): void {
@@ -33,6 +34,7 @@ export class Query1Component implements OnInit {
 
   clickGetId(id: any) {
     // console.log(id);
+    this.selectedId = id;
     const rings = id.geometry.rings;
     const spatialRef = id.geometry.spatialReference;
     this.sendGeometry.emit({ rings, spatialRef });

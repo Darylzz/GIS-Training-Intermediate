@@ -9,9 +9,15 @@
     </ng-template>
     <ng-template pTemplate="body" let-info let-id>
       <tr (click)="clickGetId(id)">
-        <td>{{ info.attributes?.sub_region }}</td>
-        <td>{{ info.attributes?.state_name }}</td>
-        <td>{{ info.attributes?.state_abbr }}</td>
+        <td [ngClass]="{ highlight: selectedId === id }">
+          {{ info.attributes?.sub_region }}
+        </td>
+        <td [ngClass]="{ highlight: selectedId === id }">
+          {{ info.attributes?.state_name }}
+        </td>
+        <td [ngClass]="{ highlight: selectedId === id }">
+          {{ info.attributes?.state_abbr }}
+        </td>
       </tr>
     </ng-template>
   </p-table>

@@ -42,7 +42,6 @@ export class Map1Component implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    console.log(this.getGeometry);
     const polygon = new Polygon({
       rings: this.getGeometry?.rings,
       spatialReference: this.getGeometry?.spatialRef,
