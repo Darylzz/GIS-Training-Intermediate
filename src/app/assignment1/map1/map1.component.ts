@@ -57,7 +57,9 @@ export class Map1Component implements OnInit, OnChanges {
       symbol: symbols,
       geometry: polygon,
     });
-    this.map1Service.mapView!.extent = polygon.extent.expand(2);
+    if (polygon.extent) {
+      this.map1Service.mapView!.extent = polygon.extent.expand(2);
+    }
     this.map1Service.mapView?.graphics.remove(this.graphic);
     this.graphic = graphic;
     this.map1Service.mapView?.graphics.add(graphic);
