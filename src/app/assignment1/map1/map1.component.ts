@@ -29,7 +29,7 @@ export class Map1Component implements OnInit, OnChanges {
         spatialReference: data?.spatialRef,
       });
       const symbols = new SimpleFillSymbol({
-        color: 'blue',
+        color: [0, 0, 255, 0.3],
         outline: {
           color: 'tranparent',
           width: 2,
@@ -39,9 +39,11 @@ export class Map1Component implements OnInit, OnChanges {
         symbol: symbols,
         geometry: polygon,
       });
+      this.map1Service.mapView!.extent = polygon.extent.expand(2);
       this.map1Service.mapView?.graphics.remove(this.graphic);
       this.graphic = graphic;
       this.map1Service.mapView?.graphics.add(graphic);
+      this.map1Service.mapView?.goTo(polygon.centroid);
     });
   }
 
