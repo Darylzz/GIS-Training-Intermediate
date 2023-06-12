@@ -1,6 +1,7 @@
 .queryContainer {
   max-height: 100vh;
   overflow: auto;
+  width: 30vw;
 }
 .highlight {
   background-color: rgb(85, 85, 252);
