@@ -35,7 +35,7 @@ export class Query1Component implements OnInit {
 
   clickGetId(id: any) {
     // console.log(id);
-    this.selectedId = id;
+    this.selectedId = id.uid;
     const rings = id.geometry.rings;
     const spatialRef = id.geometry.spatialReference;
     this.sendGeometry.emit({ rings, spatialRef });
