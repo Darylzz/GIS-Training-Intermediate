@@ -62,5 +62,6 @@ export class Map1Component implements OnInit, OnChanges {
     this.map1Service.mapView?.graphics.remove(this.graphic);
     this.graphic = graphic;
     this.map1Service.mapView?.graphics.add(graphic);
+    this.map1Service.mapView?.goTo(polygon.centroid);
   }
 }
