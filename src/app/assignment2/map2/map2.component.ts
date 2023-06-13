@@ -1,10 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Map2Service } from '../service/map2.service';
+import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+import Graphic from '@arcgis/core/Graphic';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 
 @Component({
   selector: 'app-map2',
   templateUrl: './map2.component.html',
-  styleUrls: ['./map2.component.css']
+  styleUrls: ['./map2.component.css'],
 })
-export class Map2Component {
+export class Map2Component implements OnInit {
+  @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
 
+  constructor(private map2Service: Map2Service) {}
+
+  bufferEnable: boolean = false;
+  buffer: any;
+  bufferGraphic: Graphic;
+  pointBufferGraphic: Graphic;
+
+  ngOnInit(): void {
+    this.map2Service.createMap(this.viewMap.nativeElement);
+
+    const url =
+      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0';
+
+    const layer = new FeatureLayer({
+      url: url,
+    });
+
+    this.map2Service.map.add(layer);
+
+    this.map2Service.mapView.when(() => {
+      this.map2Service.mapView.on('click', (event) => {
+        const point = event.mapPoint;
+
+        const circle = new SimpleFillSymbol({
+          color: [0, 0, 255, 0.3],
+          outline: {
+            color: 'tranparent',
+            width: 2,
+          },
+        });
+
+        const marker = new SimpleMarkerSymbol({
+          color: [0, 0, 80, 0.3],
+          outline: {
+            color: 'tranparent',
+            width: 2,
+          },
+        });
+
+        this.buffer = geometryEngine.geodesicBuffer(point, 20, 'kilometers');
+
+        const newPointBufferGraphic = new Graphic({
+          geometry: point,
+          symbol: marker,
+        });
+
+        const newBufferGraphic = new Graphic({
+          geometry: this.buffer,
+          symbol: circle,
+        });
+
+        this.map2Service.mapView.graphics.removeAll();
+        this.bufferGraphic = newBufferGraphic;
+        this.pointBufferGraphic = newPointBufferGraphic;
+        this.map2Service.mapView.graphics.addMany([
+          newBufferGraphic,
+          newPointBufferGraphic,
+        ]);
+      });
+    });
+  }
 }

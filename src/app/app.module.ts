@@ -11,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { Assignment2Component } from './assignment2/assignment2.component';
 import { Map2Component } from './assignment2/map2/map2.component';
 import { Facility2Component } from './assignment2/facility2/facility2.component';
+import { Map2Service } from './assignment2/service/map2.service';
 
 const routes = [
   { path: '1', component: Assignment1Component },
@@ -28,7 +29,7 @@ const routes = [
     Facility2Component,
   ],
   imports: [BrowserModule, TableModule, RouterModule.forRoot(routes)],
-  providers: [Map1Service],
+  providers: [Map1Service, Map2Service],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
