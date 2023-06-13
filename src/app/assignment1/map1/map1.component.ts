@@ -6,7 +6,6 @@ import {
   OnChanges,
 } from '@angular/core';
 import { Map1Service } from '../service/map1.service';
-import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';

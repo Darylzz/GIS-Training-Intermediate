@@ -4,7 +4,7 @@ import MapView from '@arcgis/core/views/MapView';
 
 export class Map1Service {
   map: Map | null;
-  mapView: MapView | null;
+  mapView: MapView;
   rings: any | null;
   spatialRef: any | null;
   emitRings = new EventEmitter<any>();
