@@ -8,8 +8,14 @@ import { Query1Component } from './assignment1/query1/query1.component';
 import { RouterModule } from '@angular/router';
 import { Map1Service } from './assignment1/service/map1.service';
 import { TableModule } from 'primeng/table';
+import { Assignment2Component } from './assignment2/assignment2.component';
+import { Map2Component } from './assignment2/map2/map2.component';
+import { Facility2Component } from './assignment2/facility2/facility2.component';
 
-const routes = [{ path: '1', component: Assignment1Component }];
+const routes = [
+  { path: '1', component: Assignment1Component },
+  { path: '2', component: Assignment2Component },
+];
 
 @NgModule({
   declarations: [
@@ -17,6 +23,9 @@ const routes = [{ path: '1', component: Assignment1Component }];
     Assignment1Component,
     Map1Component,
     Query1Component,
+    Assignment2Component,
+    Map2Component,
+    Facility2Component,
   ],
   imports: [BrowserModule, TableModule, RouterModule.forRoot(routes)],
   providers: [Map1Service],
