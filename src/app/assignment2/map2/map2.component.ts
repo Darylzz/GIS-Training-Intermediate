@@ -20,6 +20,7 @@ export class Map2Component implements OnInit {
   buffer: any;
   bufferGraphic: Graphic;
   pointBufferGraphic: Graphic;
+  citiesLayer: FeatureLayer;
 
   ngOnInit(): void {
     this.map2Service.createMap(this.viewMap.nativeElement);
@@ -27,11 +28,11 @@ export class Map2Component implements OnInit {
     const url =
       'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0';
 
-    const layer = new FeatureLayer({
+    this.citiesLayer = new FeatureLayer({
       url: url,
     });
 
-    this.map2Service.map.add(layer);
+    this.map2Service.map.add(this.citiesLayer);
 
     this.map2Service.mapView.when(() => {
       this.map2Service.mapView.on('click', (event) => {
@@ -72,6 +73,15 @@ export class Map2Component implements OnInit {
           newBufferGraphic,
           newPointBufferGraphic,
         ]);
+
+        const query = this.citiesLayer.createQuery();
+        query.geometry = this.buffer;
+        query.spatialRelationship = 'intersects';
+        query.returnGeometry = true;
+
+        this.citiesLayer.queryFeatures(query).then((response) => {
+          console.log(response);
+        });
       });
     });
   }
