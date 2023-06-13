@@ -1,4 +1,11 @@
-import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  SimpleChanges,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 
 @Component({
   selector: 'app-facility2',
@@ -6,16 +13,21 @@ import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
   styleUrls: ['./facility2.component.css'],
 })
 export class Facility2Component implements OnChanges {
-  @Input() cityName: any[];
+  @Input() cityName: any;
+  @Output() sendPathCity = new EventEmitter<any>();
+
+  arrCityName: any[] = [];
   isselected: boolean = false;
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(this.cityName);
+    this.arrCityName.push(this.cityName);
   }
 
   clickCity(value: any) {
     this.isselected = value.uid;
-    console.log(value);
+    // console.log(value);
+    const path = value.geometry.paths;
+    this.sendPathCity.emit(path);
   }
 }

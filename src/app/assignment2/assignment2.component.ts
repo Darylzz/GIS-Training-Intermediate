@@ -7,8 +7,13 @@ import { Component } from '@angular/core';
 })
 export class Assignment2Component {
   cityName: any;
+  pathCity: any;
 
   getCityName(value: any) {
     this.cityName = value;
+  }
+
+  getPathCity(value: any) {
+    this.pathCity = value;
   }
 }

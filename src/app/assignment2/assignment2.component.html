@@ -1,4 +1,10 @@
 <div class="container">
-  <app-map2 (sendCityName)="getCityName($event)"></app-map2>
-  <app-facility2 [cityName]="cityName"></app-facility2>
+  <app-map2
+    (sendCityName)="getCityName($event)"
+    [getPathCity]="pathCity"
+  ></app-map2>
+  <app-facility2
+    [cityName]="cityName"
+    (sendPathCity)="getPathCity($event)"
+  ></app-facility2>
 </div>

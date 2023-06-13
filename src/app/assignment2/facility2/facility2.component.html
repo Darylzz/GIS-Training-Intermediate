@@ -1,9 +1,9 @@
 <div class="facilityContainer">
-  <p-table [value]="cityName">
+  <p-table [value]="arrCityName">
     <ng-template pTemplate="body" let-city let-id>
       <tr (click)="clickCity(city)">
         <td [ngClass]="{ selectedCity: isselected === city.uid }">
-          {{ city.attributes?.areaname }}
+          {{ city.attributes?.Name.slice(13) }}
         </td>
       </tr>
     </ng-template>

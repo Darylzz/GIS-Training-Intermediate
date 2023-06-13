@@ -5,6 +5,9 @@ import {
   OnInit,
   Output,
   EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { Map2Service } from '../service/map2.service';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
@@ -23,9 +26,10 @@ import Polyline from '@arcgis/core/geometry/Polyline';
   templateUrl: './map2.component.html',
   styleUrls: ['./map2.component.css'],
 })
-export class Map2Component implements OnInit {
+export class Map2Component implements OnInit, OnChanges {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
   @Output() sendCityName = new EventEmitter<any>();
+  @Input() getPathCity: any;
 
   constructor(private map2Service: Map2Service) {}
 
@@ -34,8 +38,7 @@ export class Map2Component implements OnInit {
   pointBufferGraphic: Graphic;
   cityPoint: Graphic;
   citiesLayer: FeatureLayer;
-  path: any;
-
+  currentPathHighLight: Graphic;
   arrCity: any[] = [];
 
   ngOnInit(): void {
@@ -92,6 +95,9 @@ export class Map2Component implements OnInit {
           newBufferGraphic,
           newPointBufferGraphic,
         ]);
+        if (this.buffer.extent) {
+          this.map2Service.mapView.extent = this.buffer.extent;
+        }
 
         const query = this.citiesLayer.createQuery();
         query.geometry = this.buffer;
@@ -103,9 +109,8 @@ export class Map2Component implements OnInit {
           res.map((value: any) => {
             const geometry = value.geometry;
             const cityName = value.attributes.areaname;
-            this.arrCity.push(value);
+            // this.arrCity.push(value);
 
-            this.sendCityName.emit(this.arrCity);
             const cityInBuffer = new Graphic({
               geometry: geometry,
               symbol: marker,
@@ -130,6 +135,9 @@ export class Map2Component implements OnInit {
               .then((response: any) => {
                 const res = response.routes.features[0];
                 const path = res.geometry.paths;
+                this.sendCityName.emit(res);
+                // console.log(res);
+
                 // console.log(path);
                 const line = new SimpleLineSymbol({
                   color: [0, 0, 90],
@@ -146,11 +154,32 @@ export class Map2Component implements OnInit {
               .catch((error) => {
                 console.log(error);
               });
-
             this.map2Service.mapView.graphics.add(cityInBuffer);
           });
         });
       });
     });
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    const line = new SimpleLineSymbol({
+      color: 'red',
+    });
+
+    const pathLine = new Polyline({
+      paths: this.getPathCity,
+    });
+
+    const pathHighLight = new Graphic({
+      geometry: pathLine,
+      symbol: line,
+    });
+
+    if (pathLine.extent) {
+      this.map2Service.mapView.extent = pathLine.extent.expand(2);
+    }
+
+    this.map2Service.mapView?.graphics.remove(this.currentPathHighLight);
+    this.currentPathHighLight = pathHighLight;
+    this.map2Service.mapView?.graphics.add(pathHighLight);
   }
 }
