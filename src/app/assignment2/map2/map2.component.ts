@@ -1,4 +1,11 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Map2Service } from '../service/map2.service';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
@@ -18,6 +25,7 @@ import Polyline from '@arcgis/core/geometry/Polyline';
 })
 export class Map2Component implements OnInit {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
+  @Output() sendCityName = new EventEmitter<any>();
 
   constructor(private map2Service: Map2Service) {}
 
@@ -26,8 +34,9 @@ export class Map2Component implements OnInit {
   pointBufferGraphic: Graphic;
   cityPoint: Graphic;
   citiesLayer: FeatureLayer;
-  arr: Graphic[] = [];
   path: any;
+
+  arrCity: any[] = [];
 
   ngOnInit(): void {
     this.map2Service.createMap(this.viewMap.nativeElement);
@@ -94,6 +103,9 @@ export class Map2Component implements OnInit {
           res.map((value: any) => {
             const geometry = value.geometry;
             const cityName = value.attributes.areaname;
+            this.arrCity.push(value);
+
+            this.sendCityName.emit(this.arrCity);
             const cityInBuffer = new Graphic({
               geometry: geometry,
               symbol: marker,

@@ -1,1 +1,11 @@
-<p>facility2 works!</p>
+<div class="facilityContainer">
+  <p-table [value]="cityName">
+    <ng-template pTemplate="body" let-city let-id>
+      <tr (click)="clickCity(city)">
+        <td [ngClass]="{ selectedCity: isselected === city.uid }">
+          {{ city.attributes?.areaname }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
