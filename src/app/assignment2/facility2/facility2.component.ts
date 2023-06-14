@@ -21,7 +21,7 @@ export class Facility2Component implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.arrCityName.push(this.cityName);
+    this.arrCityName = this.cityName;
   }
 
   clickCity(value: any) {

@@ -39,19 +39,12 @@ export class Map2Component implements OnInit, OnChanges {
   cityPoint: Graphic;
   citiesLayer: FeatureLayer;
   currentPathHighLight: Graphic;
-  arrCity: any[] = [];
 
   ngOnInit(): void {
     this.map2Service.createMap(this.viewMap.nativeElement);
 
-    const url =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0';
-
-    const facilityURL =
-      'https://sampleserver6.arcgisonline.com/arcgis/rest/services/NetworkAnalysis/SanDiego/NAServer/ClosestFacility';
-
     this.citiesLayer = new FeatureLayer({
-      url: url,
+      url: this.map2Service.url,
     });
 
     // this.map2Service.map.add(this.citiesLayer);
@@ -60,32 +53,16 @@ export class Map2Component implements OnInit, OnChanges {
       this.map2Service.mapView.on('click', (event) => {
         const point = event.mapPoint;
 
-        const circle = new SimpleFillSymbol({
-          color: [0, 0, 255, 0.3],
-          outline: {
-            color: 'transparent',
-            width: 2,
-          },
-        });
-
-        const marker = new SimpleMarkerSymbol({
-          color: 'blue',
-          outline: {
-            color: 'transparent',
-            width: 2,
-          },
-        });
-
         this.buffer = geometryEngine.geodesicBuffer(point, 20, 'kilometers');
 
         const newPointBufferGraphic = new Graphic({
           geometry: point,
-          symbol: marker,
+          symbol: this.map2Service.marker,
         });
 
         const newBufferGraphic = new Graphic({
           geometry: this.buffer,
-          symbol: circle,
+          symbol: this.map2Service.circle,
         });
 
         this.map2Service.mapView.graphics.removeAll();
@@ -106,81 +83,67 @@ export class Map2Component implements OnInit, OnChanges {
 
         this.citiesLayer.queryFeatures(query).then((response) => {
           const res = response.features;
-          res.map((value: any) => {
-            const geometry = value.geometry;
-            const cityName = value.attributes.areaname;
-            // this.arrCity.push(value);
-
-            const markerCity = new SimpleMarkerSymbol({
-              style: 'square',
-              color: 'purple',
-              outline: {
-                color: 'tranparent',
-                width: 2,
-              },
-            });
-
-            const cityInBuffer = new Graphic({
-              geometry: geometry,
-              symbol: markerCity,
-              attributes: {
-                name: cityName,
-              },
-            });
-
-            const closestFacilityParameters = new ClosestFacilityParameters({
-              incidents: new FeatureSet({
-                features: [this.pointBufferGraphic],
-              }),
-              facilities: new FeatureSet({
-                features: [cityInBuffer],
-              }),
-              returnRoutes: true,
-              defaultTargetFacilityCount: 10,
-            });
-
-            closestFacility
-              .solve(facilityURL, closestFacilityParameters)
-              .then((response: any) => {
-                const res = response.routes.features[0];
-                const path = res.geometry.paths;
-                this.sendCityName.emit(res);
-                // console.log(res);
-
-                // console.log(path);
-                const line = new SimpleLineSymbol({
-                  color: [0, 0, 90],
-                });
-                const pathLine = new Polyline({
-                  paths: path,
-                });
-                const pathGraphic = new Graphic({
-                  geometry: pathLine,
-                  symbol: line,
-                });
-                this.map2Service.mapView.graphics.add(pathGraphic);
-              })
-              .catch((error) => {
-                console.log(error);
+          const arr: any = [];
+          res.map((value: any, idx: number) => {
+            if (idx <= 9) {
+              const geometry = value.geometry;
+              const cityName = value.attributes.areaname;
+              const cityInBuffer = new Graphic({
+                geometry: geometry,
+                symbol: this.map2Service.markerCity,
+                attributes: {
+                  name: cityName,
+                },
               });
-            this.map2Service.mapView.graphics.add(cityInBuffer);
+
+              const closestFacilityParameters = new ClosestFacilityParameters({
+                incidents: new FeatureSet({
+                  features: [this.pointBufferGraphic],
+                }),
+                facilities: new FeatureSet({
+                  features: [cityInBuffer],
+                }),
+                returnRoutes: true,
+                defaultTargetFacilityCount: 10,
+              });
+
+              closestFacility
+                .solve(this.map2Service.facilityURL, closestFacilityParameters)
+                .then((response: any) => {
+                  const res = response.routes.features[0];
+                  const path = res.geometry.paths;
+                  console.log(res);
+
+                  arr.push(res);
+
+                  const pathLine = new Polyline({
+                    paths: path,
+                  });
+                  const pathGraphic = new Graphic({
+                    geometry: pathLine,
+                    symbol: this.map2Service.line,
+                  });
+                  this.map2Service.mapView.graphics.add(pathGraphic);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              this.map2Service.mapView.graphics.add(cityInBuffer);
+              this.sendCityName.emit(arr);
+            }
           });
         });
       });
     });
   }
   ngOnChanges(changes: SimpleChanges): void {
-    const line = new SimpleLineSymbol({
-      color: 'red',
-    });
-
     const pathLine = new Polyline({
       paths: this.getPathCity,
     });
 
     const pathHighLight = new Graphic({
       geometry: pathLine,
-      symbol: line,
+      symbol: this.map2Service.lineHighLight,
     });
 
     if (pathLine.extent) {
