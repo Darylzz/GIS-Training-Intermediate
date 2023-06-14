@@ -95,6 +95,7 @@ export class Map2Component implements OnInit, OnChanges {
                   name: cityName,
                 },
               });
+              this.map2Service.mapView.graphics.add(cityInBuffer);
 
               const closestFacilityParameters = new ClosestFacilityParameters({
                 incidents: new FeatureSet({
@@ -112,8 +113,6 @@ export class Map2Component implements OnInit, OnChanges {
                 .then((response: any) => {
                   const res = response.routes.features[0];
                   const path = res.geometry.paths;
-                  console.log(res);
-
                   arr.push(res);
 
                   const pathLine = new Polyline({
@@ -123,12 +122,13 @@ export class Map2Component implements OnInit, OnChanges {
                     geometry: pathLine,
                     symbol: this.map2Service.line,
                   });
+
                   this.map2Service.mapView.graphics.add(pathGraphic);
                 })
                 .catch((error) => {
                   console.log(error);
                 });
-              this.map2Service.mapView.graphics.add(cityInBuffer);
+
               this.sendCityName.emit(arr);
             }
           });
