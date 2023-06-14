@@ -15,8 +15,8 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 export class Map3Component implements OnInit {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
   currentPolygon: Graphic;
-  objectId: any;
-  deleteFeture: any;
+  objectId: any
+  deleteFeature: any;
   polygonSymBol: SimpleFillSymbol = new SimpleFillSymbol({
     color: [0, 0, 255, 0.3],
     outline: {
@@ -53,40 +53,36 @@ export class Map3Component implements OnInit {
             rings: geometry.rings,
             spatialReference: geometry.spatialReference,
           });
+
           const addFeaturePolygon = new Graphic({
             geometry: polygon,
             symbol: this.polygonSymBol,
             attributes: { description: 'ING-Point', symbolid: 0 },
           });
-
+          
+          this.map3Service.mapView.graphics.add(addFeaturePolygon);
           featureLayer
             .applyEdits({
               addFeatures: [addFeaturePolygon],
-              deleteFeatures: this.deleteFeture,
             })
-            .then((response) => {});
+            .then((response) => {
+              console.log(response);
+              
+            });
           this.currentPolygon = addFeaturePolygon;
-          this.map3Service.mapView.graphics.add(addFeaturePolygon);
         }
       });
 
       sketch.on('update', (event: any) => {
-        console.log(event.graphics[0].geometry);
-        if (event.state === 'start') {
-          const query = featureLayer.createQuery();
-          query.geometry = event.graphics[0].geometry;
-          query.spatialRelationship = 'intersects';
-          featureLayer.queryObjectIds(query).then((response) => {
-            console.log(response);
-            this.objectId = response;
-          });
-        }
-      });
-      sketch.on('delete', (event) => {
         console.log(event);
-        this.deleteFeture = { objectid: this.objectId };
-        console.log(this.deleteFeture);
-        this.map3Service.mapView.graphics.remove(this.currentPolygon);
+        if(event.state === 'start') {
+          const query = featureLayer.createQuery()
+          query.geometry = event.graphics[0].geometry
+          query.spatialRelationship = 'intersects'
+          featureLayer.queryFeatures(query).then((response) => {
+            console.log(response);
+          })
+        }
       });
     });
   }
