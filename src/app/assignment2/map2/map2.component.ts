@@ -69,7 +69,7 @@ export class Map2Component implements OnInit, OnChanges {
         });
 
         const marker = new SimpleMarkerSymbol({
-          color: [0, 0, 80, 0.3],
+          color: 'blue',
           outline: {
             color: 'transparent',
             width: 2,
@@ -111,9 +111,18 @@ export class Map2Component implements OnInit, OnChanges {
             const cityName = value.attributes.areaname;
             // this.arrCity.push(value);
 
+            const markerCity = new SimpleMarkerSymbol({
+              style: 'square',
+              color: 'purple',
+              outline: {
+                color: 'tranparent',
+                width: 2,
+              },
+            });
+
             const cityInBuffer = new Graphic({
               geometry: geometry,
-              symbol: marker,
+              symbol: markerCity,
               attributes: {
                 name: cityName,
               },
