@@ -1,5 +1,8 @@
 <div class="container">
-  <app-map4 (sendPoint)="getPointFromMap($event)"></app-map4>
+  <app-map4
+    (sendPoint)="getPointFromMap($event)"
+    [getPointArr]="getPointArr"
+  ></app-map4>
   <app-route4
     [getPointArr]="getPointArr"
     (updateArrPoint)="updatePointArr($event)"

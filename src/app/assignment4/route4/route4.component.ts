@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import * as route from '@arcgis/core/rest/route';
 import RouteParameters from '@arcgis/core/rest/support/RouteParameters';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
@@ -11,7 +18,7 @@ import SimpleLineSymbol from '@arcgis/core/symbols/SimpleLineSymbol';
   templateUrl: './route4.component.html',
   styleUrls: ['./route4.component.css'],
 })
-export class Route4Component {
+export class Route4Component implements OnChanges {
   @Input() getPointArr: Graphic[];
   @Output() updateArrPoint = new EventEmitter<any>();
   routeUrl =
@@ -26,6 +33,10 @@ export class Route4Component {
   isSelected: any;
   constructor(private map4Service: Map4Service) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.getPointArr);
+  }
+
   clickToRoute() {
     const routeParam: any = new RouteParameters({
       stops: new FeatureSet({
@@ -33,24 +44,30 @@ export class Route4Component {
       }),
       returnDirections: true,
     });
-    route.solve(this.routeUrl, routeParam).then((response) => {
-      const routeResult = response.routeResults[0];
-      this.directions = routeResult.directions.features;
-      console.log(this.directions);
+    route
+      .solve(this.routeUrl, routeParam)
+      .then((response) => {
+        const routeResult = response.routeResults[0];
+        this.directions = routeResult.directions.features;
+        console.log(this.directions);
 
-      const geometry: any = routeResult.route.geometry;
+        const geometry: any = routeResult.route.geometry;
 
-      const pathLine = new Graphic({
-        geometry: geometry,
-        symbol: this.lineSymbol,
+        const pathLine = new Graphic({
+          geometry: geometry,
+          symbol: this.lineSymbol,
+        });
+        this.map4Service.mapView.graphics.add(pathLine);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      this.map4Service.mapView.graphics.add(pathLine);
-    });
   }
 
   clickClearRoute() {
     this.map4Service.mapView.graphics.removeAll();
     this.getPointArr = [];
+    this.directions = [];
     this.updateArrPoint.emit(this.getPointArr);
   }
 

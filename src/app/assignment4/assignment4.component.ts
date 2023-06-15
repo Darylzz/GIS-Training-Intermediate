@@ -7,16 +7,13 @@ import Graphic from '@arcgis/core/Graphic';
   styleUrls: ['./assignment4.component.css'],
 })
 export class Assignment4Component {
-  getPointArr: Graphic[];
+  getPointArr: Graphic[] = [];
 
-  updatePoint: any;
-
-  getPointFromMap(value: Graphic[]) {
-    this.getPointArr = value;
+  getPointFromMap(value: Graphic) {
+    this.getPointArr.push(value);
   }
 
-  updatePointArr(value: any) {
-    this.updatePoint = value;
-    console.log(this.updatePoint);
+  updatePointArr(value: Graphic[]) {
+    this.getPointArr = value;
   }
 }

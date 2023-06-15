@@ -8,10 +8,9 @@ import {
   Input,
 } from '@angular/core';
 import { Map4Service } from '../service/map4.service';
-import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
 import Point from '@arcgis/core/geometry/Point';
 import Graphic from '@arcgis/core/Graphic';
-
+import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 @Component({
   selector: 'app-map4',
   templateUrl: './map4.component.html',
@@ -19,17 +18,8 @@ import Graphic from '@arcgis/core/Graphic';
 })
 export class Map4Component implements OnInit {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
-  @Output() sendPoint = new EventEmitter<Graphic[]>();
-  @Input() updatePointArr: any;
-  pointStopMarker = new SimpleMarkerSymbol({
-    color: [0, 0, 255, 0.3],
-    outline: {
-      color: 'tranparent',
-      width: 2,
-    },
-  });
-
-  arrPointStop: Graphic[] = [];
+  @Output() sendPoint = new EventEmitter<Graphic>();
+  @Input() getPointArr: Graphic[] = [];
 
   constructor(private map4Service: Map4Service) {}
 
@@ -44,14 +34,20 @@ export class Map4Component implements OnInit {
           longitude: mapPoint.longitude,
         });
 
+        const pointStopMarker = new PictureMarkerSymbol({
+          url:
+            this.getPointArr.length === 0
+              ? '../../../assets/pin.svg'
+              : '../../../assets/pin2.svg',
+        });
+
         const pointGraphic = new Graphic({
           geometry: pointStop,
-          symbol: this.pointStopMarker,
+          symbol: pointStopMarker,
         });
 
         this.map4Service.mapView.graphics.add(pointGraphic);
-        this.arrPointStop.push(pointGraphic);
-        this.sendPoint.emit(this.arrPointStop);
+        this.sendPoint.emit(pointGraphic);
       });
     });
   }
