@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Map3Service } from '../service/map3.service';
 import Sketch from '@arcgis/core/widgets/Sketch';
 import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
-import Polygon from '@arcgis/core/geometry/Polygon';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
