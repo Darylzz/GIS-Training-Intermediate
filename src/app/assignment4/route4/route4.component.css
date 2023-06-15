@@ -1,0 +1,12 @@
+.container {
+  width: 35vw;
+  height: 100vh;
+  overflow: auto;
+}
+.selectedDirection {
+  background-color: rgba(0, 0, 255, 0.3);
+}
+.flex {
+  display: flex;
+  flex-direction: column;
+}

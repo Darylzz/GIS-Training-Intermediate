@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 
 import { AppComponent } from './app.component';
 import { Assignment1Component } from './assignment1/assignment1.component';
@@ -18,6 +20,8 @@ import { Map3Service } from './assignment3/service/map3.service';
 import { Assignment4Component } from './assignment4/assignment4.component';
 import { Map4Component } from './assignment4/map4/map4.component';
 import { Route4Component } from './assignment4/route4/route4.component';
+import { Map4Service } from './assignment4/service/map4.service';
+import { MessageService } from 'primeng/api';
 
 const routes = [
   { path: '1', component: Assignment1Component },
@@ -41,8 +45,20 @@ const routes = [
     Map4Component,
     Route4Component,
   ],
-  imports: [BrowserModule, TableModule, RouterModule.forRoot(routes)],
-  providers: [Map1Service, Map2Service, Map3Service],
+  imports: [
+    BrowserModule,
+    TableModule,
+    ButtonModule,
+    ToastModule,
+    RouterModule.forRoot(routes),
+  ],
+  providers: [
+    Map1Service,
+    Map2Service,
+    Map3Service,
+    Map4Service,
+    MessageService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

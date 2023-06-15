@@ -1,6 +1,6 @@
 <div class="facilityContainer">
   <p-table [value]="arrCityName">
-    <ng-template pTemplate="body" let-city let-id>
+    <ng-template pTemplate="body" let-city>
       <tr (click)="clickCity(city)">
         <td [ngClass]="{ selectedCity: isselected === city.uid }">
           {{ city.attributes?.Name.slice(13) }}

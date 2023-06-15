@@ -17,7 +17,7 @@ export class Facility2Component implements OnChanges {
   @Output() sendPathCity = new EventEmitter<any>();
 
   arrCityName: any[] = [];
-  isselected: boolean = false;
+  isselected: any;
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
