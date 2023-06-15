@@ -15,11 +15,15 @@ import { Map2Service } from './assignment2/service/map2.service';
 import { Assignment3Component } from './assignment3/assignment3.component';
 import { Map3Component } from './assignment3/map3/map3.component';
 import { Map3Service } from './assignment3/service/map3.service';
+import { Assignment4Component } from './assignment4/assignment4.component';
+import { Map4Component } from './assignment4/map4/map4.component';
+import { Route4Component } from './assignment4/route4/route4.component';
 
 const routes = [
   { path: '1', component: Assignment1Component },
   { path: '2', component: Assignment2Component },
   { path: '3', component: Assignment3Component },
+  { path: '4', component: Assignment4Component },
 ];
 
 @NgModule({
@@ -33,6 +37,9 @@ const routes = [
     Facility2Component,
     Assignment3Component,
     Map3Component,
+    Assignment4Component,
+    Map4Component,
+    Route4Component,
   ],
   imports: [BrowserModule, TableModule, RouterModule.forRoot(routes)],
   providers: [Map1Service, Map2Service, Map3Service],
