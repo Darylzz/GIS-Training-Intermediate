@@ -24,6 +24,7 @@ export class Map3Component implements OnInit {
   objectId: any;
   addFeature: Graphic;
   queryGeometry: any;
+  deleteGeometry: any;
   constructor(private map3Service: Map3Service) {}
 
   ngOnInit(): void {
@@ -103,7 +104,11 @@ export class Map3Component implements OnInit {
 
       sketch.on('delete', (event) => {
         if (event.type === 'delete') {
-          const deletePointPolygon = event.graphics[0].geometry;
+          const geometry = event.graphics;
+          geometry.forEach((value) => {
+            this.deleteGeometry = value.geometry;
+          });
+          const deletePointPolygon = this.deleteGeometry;
           const deletePolygonGraphic = new Graphic({
             geometry: deletePointPolygon,
             attributes: { objectid: this.objectId },
