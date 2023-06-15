@@ -70,7 +70,7 @@ export class Map3Component implements OnInit {
         // console.log(event);
         if (event.state === 'start' && event.type === 'update') {
           const mapGraphic = event.graphics;
-          mapGraphic.map((value: any) => {
+          mapGraphic.forEach((value: any) => {
             this.queryGeometry = value.geometry;
           });
           const query = featureLayer.createQuery();
