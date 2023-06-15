@@ -38,6 +38,7 @@ export class Map3Component implements OnInit {
       const sketch = new Sketch({
         view: this.map3Service.mapView,
         layer: graphicLayer,
+        availableCreateTools: ['polygon'],
       });
       this.map3Service.mapView.ui.add(sketch, 'top-right');
 
