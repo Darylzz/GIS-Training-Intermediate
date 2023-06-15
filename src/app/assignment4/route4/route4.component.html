@@ -1,7 +1,12 @@
 <div class="container">
   <div class="flex">
     <div class="routeButton">
-      <button pButton label="Route" (click)="clickToRoute()"></button>
+      <button
+        pButton
+        label="Route"
+        *ngIf="isOpen"
+        (click)="clickToRoute()"
+      ></button>
       <button
         pButton
         label="Clear"

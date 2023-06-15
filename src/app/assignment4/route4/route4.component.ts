@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 import * as route from '@arcgis/core/rest/route';
 import RouteParameters from '@arcgis/core/rest/support/RouteParameters';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
@@ -18,7 +11,7 @@ import SimpleLineSymbol from '@arcgis/core/symbols/SimpleLineSymbol';
   templateUrl: './route4.component.html',
   styleUrls: ['./route4.component.css'],
 })
-export class Route4Component implements OnChanges {
+export class Route4Component implements DoCheck {
   @Input() getPointArr: Graphic[];
   @Output() updateArrPoint = new EventEmitter<any>();
   routeUrl =
@@ -31,10 +24,19 @@ export class Route4Component implements OnChanges {
   currentDirectionPath: Graphic;
   directions: any[] = [];
   isSelected: any;
+  isOpen: boolean = false;
   constructor(private map4Service: Map4Service) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.getPointArr);
+  ngDoCheck(): void {
+    this.openButton();
+  }
+
+  openButton() {
+    if (this.getPointArr.length >= 2) {
+      this.isOpen = true;
+    } else {
+      this.isOpen = false;
+    }
   }
 
   clickToRoute() {
