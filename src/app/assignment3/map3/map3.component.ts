@@ -6,6 +6,7 @@ import Polygon from '@arcgis/core/geometry/Polygon';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-map3',
@@ -14,9 +15,6 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 })
 export class Map3Component implements OnInit {
   @ViewChild('viewMap', { static: true }) viewMap: ElementRef;
-  currentPolygon: Graphic;
-  objectId: any;
-  deleteFeture: any;
   polygonSymBol: SimpleFillSymbol = new SimpleFillSymbol({
     color: [0, 0, 255, 0.3],
     outline: {
@@ -24,6 +22,9 @@ export class Map3Component implements OnInit {
       width: 2,
     },
   });
+  objectId: any;
+  addFeature: Graphic;
+  queryGeometry: any;
   constructor(private map3Service: Map3Service) {}
 
   ngOnInit(): void {
@@ -38,7 +39,6 @@ export class Map3Component implements OnInit {
       const sketch = new Sketch({
         view: this.map3Service.mapView,
         layer: graphicLayer,
-        creationMode: 'update',
       });
       this.map3Service.mapView.ui.add(sketch, 'top-right');
 
@@ -48,45 +48,71 @@ export class Map3Component implements OnInit {
 
       sketch.on('create', (event: any) => {
         if (event.state === 'complete') {
-          const geometry = event.graphic.geometry;
-          const polygon = new Polygon({
-            rings: geometry.rings,
-            spatialReference: geometry.spatialReference,
-          });
-          const addFeaturePolygon = new Graphic({
-            geometry: polygon,
+          const pointGraphic = event.graphic.geometry;
+          const polygonGraphic = new Graphic({
+            geometry: pointGraphic,
             symbol: this.polygonSymBol,
-            attributes: { description: 'ING-Point', symbolid: 0 },
+            attributes: { description: 'ING-Point', symbolid: 1 },
           });
-
+          this.map3Service.mapView.graphics.add(polygonGraphic);
+          this.addFeature = polygonGraphic;
           featureLayer
             .applyEdits({
-              addFeatures: [addFeaturePolygon],
-              deleteFeatures: this.deleteFeture,
+              addFeatures: [this.addFeature],
             })
-            .then((response) => {});
-          this.currentPolygon = addFeaturePolygon;
-          this.map3Service.mapView.graphics.add(addFeaturePolygon);
+            .then((response) => {
+              console.log(response);
+            });
         }
       });
 
-      sketch.on('update', (event: any) => {
-        console.log(event.graphics[0].geometry);
-        if (event.state === 'start') {
+      sketch.on('update', (event) => {
+        // console.log(event);
+        if (event.state === 'start' && event.type === 'update') {
+          const mapGraphic = event.graphics;
+          mapGraphic.map((value: any) => {
+            this.queryGeometry = value.geometry;
+          });
           const query = featureLayer.createQuery();
-          query.geometry = event.graphics[0].geometry;
+          query.geometry = this.queryGeometry;
           query.spatialRelationship = 'intersects';
-          featureLayer.queryObjectIds(query).then((response) => {
-            console.log(response);
-            this.objectId = response;
+          query.returnGeometry = true;
+          featureLayer.queryFeatures(query).then((response) => {
+            const feature = response.features;
+            feature.map((value: any) => {
+              this.objectId = value.attributes.objectid;
+            });
+            // console.log(this.objectId);
+          });
+        }
+        if (event.state === 'complete' && event.type === 'update') {
+          const newPointPolygon = event.graphics[0].geometry;
+          const newPolygonGraphic = new Graphic({
+            geometry: newPointPolygon,
+            symbol: this.polygonSymBol,
+            attributes: { description: 'ING-Point', objectid: this.objectId },
+          });
+          this.map3Service.mapView.graphics.remove(this.addFeature);
+          this.addFeature = newPolygonGraphic;
+          this.map3Service.mapView.graphics.add(newPolygonGraphic);
+          featureLayer.applyEdits({
+            updateFeatures: [newPolygonGraphic],
           });
         }
       });
+
       sketch.on('delete', (event) => {
-        console.log(event);
-        this.deleteFeture = { objectid: this.objectId };
-        console.log(this.deleteFeture);
-        this.map3Service.mapView.graphics.remove(this.currentPolygon);
+        if (event.type === 'delete') {
+          const deletePointPolygon = event.graphics[0].geometry;
+          const deletePolygonGraphic = new Graphic({
+            geometry: deletePointPolygon,
+            attributes: { objectid: this.objectId },
+          });
+          this.map3Service.mapView.graphics.remove(this.addFeature);
+          featureLayer.applyEdits({
+            deleteFeatures: [deletePolygonGraphic],
+          });
+        }
       });
     });
   }
