@@ -23,14 +23,14 @@ import { Route4Component } from './assignment4/route4/route4.component';
 import { Map4Service } from './assignment4/service/map4.service';
 import { MessageService } from 'primeng/api';
 import { Assignment5Component } from './assignment5/assignment5.component';
-import { Map5Component } from './map5/map5.component';
-import { LayerList5Component } from './layer-list5/layer-list5.component';
-
+import { Map5Component } from './assignment5/map5/map5.component';
+import { Map5Service } from './assignment5/service/map5.service';
 const routes = [
   { path: '1', component: Assignment1Component },
   { path: '2', component: Assignment2Component },
   { path: '3', component: Assignment3Component },
   { path: '4', component: Assignment4Component },
+  { path: '5', component: Assignment5Component },
 ];
 
 @NgModule({
@@ -49,7 +49,6 @@ const routes = [
     Route4Component,
     Assignment5Component,
     Map5Component,
-    LayerList5Component,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +63,7 @@ const routes = [
     Map3Service,
     Map4Service,
     MessageService,
+    Map5Service,
   ],
   bootstrap: [AppComponent],
 })
