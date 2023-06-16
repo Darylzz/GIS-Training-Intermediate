@@ -27,12 +27,14 @@ import { Map5Component } from './assignment5/map5/map5.component';
 import { Map5Service } from './assignment5/service/map5.service';
 import { Assignment6Component } from './assignment6/assignment6.component';
 import { Map6Component } from './assignment6/map6/map6.component';
+import { Map6Service } from './assignment6/service/map6.service';
 const routes = [
   { path: '1', component: Assignment1Component },
   { path: '2', component: Assignment2Component },
   { path: '3', component: Assignment3Component },
   { path: '4', component: Assignment4Component },
   { path: '5', component: Assignment5Component },
+  { path: '6', component: Assignment6Component },
 ];
 
 @NgModule({
@@ -68,6 +70,7 @@ const routes = [
     Map4Service,
     MessageService,
     Map5Service,
+    Map6Service,
   ],
   bootstrap: [AppComponent],
 })
