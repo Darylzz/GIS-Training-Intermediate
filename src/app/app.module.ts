@@ -22,6 +22,9 @@ import { Map4Component } from './assignment4/map4/map4.component';
 import { Route4Component } from './assignment4/route4/route4.component';
 import { Map4Service } from './assignment4/service/map4.service';
 import { MessageService } from 'primeng/api';
+import { Assignment5Component } from './assignment5/assignment5.component';
+import { Map5Component } from './map5/map5.component';
+import { LayerList5Component } from './layer-list5/layer-list5.component';
 
 const routes = [
   { path: '1', component: Assignment1Component },
@@ -44,6 +47,9 @@ const routes = [
     Assignment4Component,
     Map4Component,
     Route4Component,
+    Assignment5Component,
+    Map5Component,
+    LayerList5Component,
   ],
   imports: [
     BrowserModule,
