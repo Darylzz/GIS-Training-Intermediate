@@ -25,6 +25,8 @@ import { MessageService } from 'primeng/api';
 import { Assignment5Component } from './assignment5/assignment5.component';
 import { Map5Component } from './assignment5/map5/map5.component';
 import { Map5Service } from './assignment5/service/map5.service';
+import { Assignment6Component } from './assignment6/assignment6.component';
+import { Map6Component } from './assignment6/map6/map6.component';
 const routes = [
   { path: '1', component: Assignment1Component },
   { path: '2', component: Assignment2Component },
@@ -49,6 +51,8 @@ const routes = [
     Route4Component,
     Assignment5Component,
     Map5Component,
+    Assignment6Component,
+    Map6Component,
   ],
   imports: [
     BrowserModule,
